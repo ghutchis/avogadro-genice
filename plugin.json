@@ -1,0 +1,11 @@
+{
+  "author": "Geoffrey Hutchison",
+  "version": 1.0,
+  "url": "https://github.com/ghutchis/avogadro-genice",
+  "name": "avogadro-genice",
+  "description": "Generate ice unit cells",
+  "type": "commands",
+  "commands": [
+    { "name": "Genice", "command": "genice.py" }
+  ]
+}
