@@ -1,0 +1,8 @@
+{
+    "a": {"type": "integer", "label": "A Repeats", "minimum": 2, "default": 2},
+    "b": {"type": "integer", "label": "B Repeats", "minimum": 2, "default": 2},
+    "c": {"type": "integer", "label": "C Repeats", "minimum": 2, "default": 2},
+    "lattice": {"type": "stringList", "label": "Lattice", "default": 0, "values": ["1h", "1c", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]},
+    "model": {"type": "stringList", "label": "Water Model", "default": 0, "values": ["tip3p", "tip4p", "tip5p", "spce", "physical"]},
+    "seed": {"type": "integer", "label": "Random Seed", "default": 12345, "maximum": 65530}
+}
