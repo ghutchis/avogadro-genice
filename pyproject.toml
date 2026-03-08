@@ -19,7 +19,7 @@ minimum-avogadro-version = "1.103"
 
 [[tool.avogadro.menu-commands]]
 identifier = "genice"
-path.menu = "Build"
-path.item.label = "Generate Ice..."
+menu = "Build"
+item = "Generate Ice..."
 user-options = "src/avogadro_genice/genice-options.json"
 
