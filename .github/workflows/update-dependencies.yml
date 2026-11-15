@@ -1,0 +1,62 @@
+name: Update dependencies
+
+# When a package listed in [tool.update-dependencies] in pyproject.toml has a
+# new release on PyPI or conda-forge (whichever it is declared from), raise its
+# ">=" floor and bump the patch version, so that Avogadro's plugin manager
+# offers the update. Avogadro reinstalls the plugin from scratch on update, so
+# it picks up the new release.
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # daily
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check for new releases and bump versions
+        id: bump
+        run: python3 .github/scripts/bump_dependency.py >> "$GITHUB_OUTPUT"
+
+      # Only needed when the repository commits pixi.lock.
+      - name: Check for a committed lockfile
+        id: lock
+        if: steps.bump.outputs.changed == 'true'
+        run: |
+          if git ls-files --error-unmatch pixi.lock > /dev/null 2>&1; then
+            echo "tracked=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: prefix-dev/setup-pixi@v0.11.3
+        if: steps.lock.outputs.tracked == 'true'
+        with:
+          run-install: false
+
+      - name: Update lockfile
+        if: steps.lock.outputs.tracked == 'true'
+        run: pixi lock
+
+      - uses: peter-evans/create-pull-request@v8
+        if: steps.bump.outputs.changed == 'true'
+        with:
+          branch: update-dependencies
+          delete-branch: true
+          add-paths: ${{ steps.lock.outputs.tracked == 'true' && 'pyproject.toml,pixi.lock' || 'pyproject.toml' }}
+          commit-message: |
+            Bump to ${{ steps.bump.outputs.version }} for new dependencies
+
+            ${{ steps.bump.outputs.summary }}
+          title: Bump to ${{ steps.bump.outputs.version }} (${{ steps.bump.outputs.summary }})
+          body: |
+            New releases: ${{ steps.bump.outputs.summary }}.
+
+            Test the plugin with the new release before merging. Once merged,
+            the Avogadro plugin index picks up the new commit and installed
+            copies show "Update available".

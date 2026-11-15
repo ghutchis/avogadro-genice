@@ -1,10 +1,10 @@
 [project]
 name = "avogadro-genice"
-version = "0.1.0"
+version = "0.1.1"
 description = "Generate ice unit cells for Avogadro 2 using GenIce2"
 authors = [{name = "Geoff Hutchison", email = "geoff.hutchison@gmail.com"}]
 license = "BSD-3-Clause"
-dependencies = ["genice2>=2.2.13.1,<3"]
+dependencies = ["genice2>=2.2.13.3,<3"]
 requires-python = ">= 3.11"
 
 [project.scripts]
@@ -13,6 +13,11 @@ avogadro-genice = "avogadro_genice:main"
 [build-system]
 build-backend = "uv_build"
 requires = ["uv_build>=0.10.2,<0.11.0"]
+
+# .github/workflows/update-dependencies.yml checks PyPI / conda-forge daily for
+# these packages and opens a PR raising their ">=" floors and the version.
+[tool.update-dependencies]
+track = ["genice2"]
 
 [tool.avogadro]
 minimum-avogadro-version = "1.103"
