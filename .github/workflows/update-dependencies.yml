@@ -19,7 +19,7 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Check for new releases and bump versions
         id: bump
@@ -34,7 +34,7 @@ jobs:
             echo "tracked=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - uses: prefix-dev/setup-pixi@v0.11.3
+      - uses: prefix-dev/setup-pixi@9936258fee697aff89b3fed6ca1f80a382ef694e # v0.11.3
         if: steps.lock.outputs.tracked == 'true'
         with:
           run-install: false
@@ -43,7 +43,7 @@ jobs:
         if: steps.lock.outputs.tracked == 'true'
         run: pixi lock
 
-      - uses: peter-evans/create-pull-request@v8
+      - uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1 # v8.1.3
         if: steps.bump.outputs.changed == 'true'
         with:
           branch: update-dependencies
